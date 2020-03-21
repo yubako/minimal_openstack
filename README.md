@@ -6,6 +6,21 @@ A brief description of the role goes here.
 Requirements
 ------------
 
+* Centos7前提
+* yum update済みであること
+* NetworkManagerは停止した状態でネットワーク設定済みであること
+* role内ではIPではなくFQDNを使うので /etc/hosts or DNSが設定されていること
+  必要なもの
+```
+# controller
+10.0.0.11       controller
+
+# compute1
+10.0.0.31       compute1
+```
+
+
+
 Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
 
 Role Variables
