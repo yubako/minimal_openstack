@@ -50,7 +50,7 @@
   failed_when: false
   register: endpoint
 
-block:
+- block:
   - name: populate identity service
     shell: "su -s /bin/sh -c 'keystone-manage db_sync' keystone"
   
