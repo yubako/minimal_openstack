@@ -7,4 +7,3 @@ def test_mariadb(host):
     assert sv_mariadb.is_running
     assert sv_mariadb.is_enabled
 
-
