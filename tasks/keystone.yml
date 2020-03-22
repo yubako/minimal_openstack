@@ -17,8 +17,9 @@
            IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
 
 - name: install httpd
-  yum: [ "openstack-keystone", "httpd", "mod_wsgi" ]
-  state: present
+  yum:
+    name: [ "openstack-keystone", "httpd", "mod_wsgi" ]
+    state: present
 
 - name: configure keystone.conf
   block:
