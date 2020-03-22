@@ -5,11 +5,15 @@
 - name: create keystone databases
   block:
     - command: "{{ sql }} -e 'CREATE DATABASE keystone;'"
-    - command: |
-        {{ sql }} -e 
-          'GRANT ALL PRIVILEGES ON keystone.* 
-           TO \'keystone\'@\'localhost\' 
-           IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
+    - set_fact: 
+        cmdline: |
+          {{ sql }} -e 
+            'GRANT ALL PRIVILEGES ON keystone.* 
+             TO \'keystone\'@\'localhost\' 
+             IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
+    - debug:
+        var: cmdline
+
     - command: |
         {{ sql }} -e 
           'GRANT ALL PRIVILEGES ON keystone.* 
