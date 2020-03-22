@@ -1,2 +1,2 @@
-server
+server ansible_user=ansible
 
