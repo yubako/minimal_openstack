@@ -21,7 +21,6 @@ check_syntax:
   script:
     - ansible-playbook -i tests/inventory tests/test.yml --check
 
-
 test_result:
   stage: testk
   script:
