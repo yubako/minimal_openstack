@@ -24,7 +24,7 @@ check_syntax:
 test_result:
   stage: testk
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml --tags etcd
+    - ansible-playbook -i tests/inventory tests/test.yml --kip-tags packages,mariadb,queue,memcached
     #- py.test --hosts=ansible@server tests/test_mariadb.py
     #- py.test --hosts=ansible@server tests/test_rabbitmq.py
     - py.test --hosts=ansible@server tests/test_memcached.py
