@@ -5,5 +5,7 @@
   tags: mariadb
 - include_tasks: queue.yml
   tags: queue
+- include_tasks: memcached.yml
+
 
 
