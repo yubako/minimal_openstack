@@ -5,10 +5,12 @@
     state: present
 
 - name: start rabbitmq
-  service: 
-    name: rabbitmq-server.service
-    state: restarted
-    enabled: yes
+  block:
+    - command: "rabbitmq-plugins enable rabbitmq_management"
+    - service: 
+      name: rabbitmq-server.service
+      state: restarted
+      enabled: yes
 
 - name: check user existance
   command: "rabbitmqctl list_users"
