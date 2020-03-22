@@ -11,10 +11,10 @@
            TO \'keystone\'@\'localhost\' 
            IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'"
     - command: >
-        "{{ sql }} -e 
+        {{ sql }} -e 
           'GRANT ALL PRIVILEGES ON keystone.* 
            TO \'keystone\'@\'%\' 
-           IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'"
+           IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
 
 - name: install httpd
   yum: [ "openstack-keystone", "httpd", "mod_wsgi" ]
