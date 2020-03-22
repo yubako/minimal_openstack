@@ -15,7 +15,7 @@
     dest: /etc/etcd/etcd.conf
 
 - command: cat /etc/etcd/etcd.conf
-   register: result
+  register: result
 
 - debug:
     var: result.stdout
