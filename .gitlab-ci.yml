@@ -8,7 +8,8 @@ stages:
 
 
 services:
-  - name: basenode:1.0
+  #- name: basenode:1.0
+  - name: ospctrlr:1.0
     alias: controller
     command: [ "/sbin/init" ]
 
@@ -24,7 +25,7 @@ check_syntax:
 test_result:
   stage: test
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml -vvv
+    - ansible-playbook -i tests/inventory tests/test.yml --skip-tags packages,mariadb,queue,memcached,etcd -vvv
     - py.test --hosts=ansible@server tests/test_mariadb.py
     - py.test --hosts=ansible@server tests/test_rabbitmq.py
     - py.test --hosts=ansible@server tests/test_memcached.py
