@@ -8,18 +8,18 @@
     - set_fact: 
         cmd: >
           {{ sql }} -e \
-            'GRANT ALL PRIVILEGES ON keystone.*  \
-             TO \'keystone\'@\'localhost\'  \
-             IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
+            "GRANT ALL PRIVILEGES ON keystone.*  \
+             TO 'keystone'@'localhost'  \
+             IDENTIFIED BY '{{ minimal_openstack_keystone_dbpass }}';"
 
     - debug: 
         var: cmd
 
     - command: >
         {{ sql }} -e  \
-          'GRANT ALL PRIVILEGES ON keystone.*  \
-           TO \'keystone\'@\'%\'  \
-           IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
+          "GRANT ALL PRIVILEGES ON keystone.*  \
+           TO 'keystone'@'%'  \
+           IDENTIFIED BY '{{ minimal_openstack_keystone_dbpass }}';"
 
 - name: install httpd
   yum:
