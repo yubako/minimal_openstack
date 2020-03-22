@@ -1,4 +1,9 @@
 
+- name: setup repository
+  yum:
+    name: centos-release-openstack-train
+    state: present
+
 - name: install etcd
   yum: 
     name: etcd
@@ -8,6 +13,13 @@
   template:
     src: etcd.conf.j2
     dest: /etc/etcd/etcd.conf
+
+- command: cat /etc/etcd/etcd.conf
+   register: result
+
+- debug:
+    var: result.stdout
+
 
 - name: start etcd
   service:

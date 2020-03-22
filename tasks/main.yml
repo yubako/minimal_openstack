@@ -6,6 +6,7 @@
 - include_tasks: queue.yml
   tags: queue
 - include_tasks: memcached.yml
+  tags: memcached
 - include_tasks: etcd.yml
 
 
