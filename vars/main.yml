@@ -5,6 +5,6 @@ minimal_openstack_controller_management_ip: "10.0.0.11"
 
 
 
-minimal_openstack_mariadb_bind_address = "{{ minimal_openstack_controller_management_ip }}"
+minimal_openstack_mariadb_bind_address: "{{ minimal_openstack_controller_management_ip }}"
 
 
