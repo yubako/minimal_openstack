@@ -1,5 +1,5 @@
 ---
-- host: server
+- hosts: server
   become: yes
   gather_facts: no
   tasks:
