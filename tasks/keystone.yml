@@ -85,4 +85,16 @@
     state: restarted
     enabled: yes
 
+- name: Create service projcet
+  block:
+    - command: "{{ openstack }} project show service" 
+      failed_when: false
+      register: service
+    - command: |
+        "{{ openstack }} project create " \
+        "  --domain default " \
+        "  --description 'Service Project'" \
+        "service"
+      when: service.rc != 0
+
 
