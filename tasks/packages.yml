@@ -9,6 +9,7 @@
   yum:
     name: '*'
     state: latest
+  tags: upgrade
 
 - name: install required packages
   yum:
