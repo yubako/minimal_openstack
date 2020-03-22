@@ -6,7 +6,7 @@
   block:
     - command: "{{ sql }} -e 'CREATE DATABASE keystone;'"
     - set_fact: 
-        cmdline: |
+        cmdline: >
           {{ sql }} -e 
             'GRANT ALL PRIVILEGES ON keystone.* 
              TO \'keystone\'@\'localhost\' 
@@ -14,7 +14,7 @@
     - debug:
         var: cmdline
 
-    - command: |
+    - command: >
         {{ sql }} -e 
           'GRANT ALL PRIVILEGES ON keystone.* 
            TO \'keystone\'@\'%\' 
