@@ -5,16 +5,16 @@
 - name: create keystone databases
   block:
     - command: "{{ sql }} -e 'CREATE DATABASE keystone;'"
-    - command: >
-        "{{ sql }} -e "
-          "'GRANT ALL PRIVILEGES ON keystone.* "
-          " TO \'keystone\'@\'localhost\' "
-          " IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'"
-    - command: >
-        "{{ sql }} -e "
-          "'GRANT ALL PRIVILEGES ON keystone.* "
-          " TO \'keystone\'@\'%\'  "
-          " IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'"
+    - command: |
+        {{ sql }} -e 
+          'GRANT ALL PRIVILEGES ON keystone.* 
+           TO \'keystone\'@\'localhost\' 
+           IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
+    - command: |
+        {{ sql }} -e 
+          'GRANT ALL PRIVILEGES ON keystone.* 
+           TO \'keystone\'@\'%\' 
+           IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
 
 - name: install httpd
   yum:
