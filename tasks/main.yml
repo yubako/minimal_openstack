@@ -1,6 +1,7 @@
 ---
 
 - include_tasks: package.yml
+  tags: package
 - include_tasks: mariadb.yml
   tags: mariadb
 
