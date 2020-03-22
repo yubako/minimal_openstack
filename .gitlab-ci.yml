@@ -19,5 +19,5 @@ before_script:
 test_result:
   stage: test
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml --skip--tags packages
+    - ansible-playbook -i tests/inventory tests/test.yml --skip-tags packages
     - py.test --hosts=ansible@server tests/test_mariadb.py
