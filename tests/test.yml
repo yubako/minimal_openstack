@@ -3,5 +3,5 @@
   become: yes
   gather_facts: no
   roles:
-    - ../../
+    - role: ../../
       tags: etcd
