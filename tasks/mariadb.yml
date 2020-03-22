@@ -26,13 +26,13 @@
 - name: set root password
   expect:
     command: /usr/bin/mysql_secure_installation
-      responses:
-        "Enter current password for root \\(enter for none\\): " : ""
-        "Set root password\\? \\[Y\\/n\\] " : "Y"
-        "New password: " : "{{ 8f10d17241a5fbc04df8 }}"
-        "Re-enter new password: " : "{{ 8f10d17241a5fbc04df8 }}"
-        "Remove anonymous users\\?" : "y"
-        "Disallow root login remotely\\?" : "y"
-        "Remove test database and access to it\\?" : "y"
-        "Reload privilege tables now\\?" : "y"
+    responses:
+      "Enter current password for root \\(enter for none\\): " : ""
+      "Set root password\\? \\[Y\\/n\\] " : "Y"
+      "New password: " : "{{ minimal_openstack_mariadb_password }}"
+      "Re-enter new password: " : "{{ minimal_openstack_mariadb_password }}"
+      "Remove anonymous users\\?" : "y"
+      "Disallow root login remotely\\?" : "y"
+      "Remove test database and access to it\\?" : "y"
+      "Reload privilege tables now\\?" : "y"
 

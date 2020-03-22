@@ -3,7 +3,7 @@ image:
   name: ansible:2.7-1
 
 stages:
-  # test: testinfraの実行
+  - lint
   - test
 
 
@@ -15,6 +15,13 @@ services:
 before_script:
   - mkdir ~/.ssh
   - cp /home/ansible/.ssh/id_rsa ~/.ssh/id_rsa
+
+
+check_syntax:
+  stage: lint
+  script:
+    - ansible-playbook -i tests/inventory tests/test.yml --dry-run
+
 
 test_result:
   stage: test
