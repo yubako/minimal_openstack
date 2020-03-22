@@ -19,5 +19,5 @@ before_script:
 test_result:
   stage: test
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml
+    - ansible-playbook -i tests/inventory tests/test.yml --tags mariadb
     #- py.test --hosts=ansible@server tests/test_httpd.py
