@@ -11,5 +11,6 @@
 - include_tasks: etcd.yml
   tags: etcd
 
-
+- include_tasks: keystone.yml
+  tags: keystone
 

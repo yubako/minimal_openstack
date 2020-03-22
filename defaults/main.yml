@@ -4,5 +4,7 @@
 minimal_openstack_controller_management_ip: "10.0.0.11"
 
 minimal_openstack_mariadb_bind_address: "{{ minimal_openstack_controller_management_ip }}"
+minimal_openstack_admin_password: "d91acde413c8c368f93f"
 minimal_openstack_mariadb_password: "8f10d17241a5fbc04df8"
 minimal_openstack_rabbitmq_password: "76747eb5850f6613871a"
+minimal_openstack_keystone_dbpass: "b245714f3b1a5752ac4b"
