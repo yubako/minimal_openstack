@@ -1,12 +1,11 @@
 
-import re
-
 def test_memcached(host):
     assert host.package('memcached').is_installed
-    assert host.service('memcached').is_running
-    assert host.service('memcached').is_enabled
+    memcached = host.service('memcached')
+    assert memcached.is_running
+    assert memcached.is_enabled
 
     content = host.file("/etc/sysconfig/memcached").content
-    assert re.match(r'^OPTIONS=.*controller"')
+    assert 'OPTIONS="-l 127.0.0.1,::1,controller"' in content
 
 
