@@ -2,7 +2,7 @@
 ---
 - name: install mariadb
   yum:
-    name: ["mariadb", "mariadb-server", "python2-PyMySQL"]
+    name: ["mariadb", "mariadb-server", "python2-PyMySQL", "pexpect"]
     state: present
 
 - name: configure mariadb

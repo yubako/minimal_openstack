@@ -15,7 +15,6 @@ services:
 before_script:
   - mkdir ~/.ssh
   - cp /home/ansible/.ssh/id_rsa ~/.ssh/id_rsa
-  - yum install -y pexpect
 
 check_syntax:
   stage: lint
