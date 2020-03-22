@@ -90,11 +90,11 @@
     - command: "{{ openstack }} project show service" 
       failed_when: false
       register: service
-    - command: |
+    - command: >
         "{{ openstack }} project create " \
         "  --domain default " \
         "  --description 'Service Project'" \
-        "service"
+        "  service"
       when: service.rc != 0
 
 
