@@ -9,7 +9,7 @@ stages:
 
 services:
   - name: basenode:1.0
-    alias: server
+    alias: controller
     command: [ "/sbin/init" ]
 
 before_script:
