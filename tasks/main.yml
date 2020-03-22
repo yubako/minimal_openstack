@@ -2,6 +2,8 @@
 
 - include_tasks: packages.yml
 - include_tasks: mariadb.yml
+  tags: mariadb
 - include_tasks: queue.yml
+  tags: queue
 
 

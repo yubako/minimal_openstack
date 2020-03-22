@@ -8,9 +8,9 @@
   block:
     - command: "rabbitmq-plugins enable rabbitmq_management"
     - service: 
-      name: rabbitmq-server.service
-      state: restarted
-      enabled: yes
+        name: rabbitmq-server.service
+        state: restarted
+        enabled: yes
 
 - name: check user existance
   command: "rabbitmqctl list_users"
