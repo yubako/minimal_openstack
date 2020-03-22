@@ -25,7 +25,7 @@ check_syntax:
 
 
 test_result:
-  stage: test
+  stage: testk
   script:
     - ansible-playbook -i tests/inventory tests/test.yml --skip-tags upgrade
     - py.test --hosts=ansible@server tests/test_mariadb.py

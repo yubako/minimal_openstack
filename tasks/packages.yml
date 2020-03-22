@@ -13,9 +13,6 @@
 
 - name: install required packages
   yum:
-    name: "{{ item }}"
+    name: [ 'python-openstackclient', 'openstack-selinux' ]
     state: present
-  with_items:
-    - "python-openstackclient"
-    - "openstack-selinux"
 

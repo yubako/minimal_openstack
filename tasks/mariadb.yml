@@ -2,12 +2,8 @@
 ---
 - name: install mariadb
   yum:
-    name: "{{ item }}"
+    name: ["mariadb", "mariadb-server", "python2-PyMySQL"]
     state: present
-  with_items:
-    - "mariadb"
-    - "mariadb-server"
-    - "python2-PyMySQL"
 
 - name: configure mariadb
   template:
