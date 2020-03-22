@@ -20,5 +20,5 @@
     - name: grant permissions to openstack
       command: 'rabbitmqctl set_permissions openstack ".*" ".*" ".*"'
 
-  when: "openstacK" not in users.stdout
+  when: "'openstacK' not in users.stdout"
 
