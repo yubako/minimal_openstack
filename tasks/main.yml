@@ -1,14 +1,6 @@
 ---
 
-- name: setup repository
-  yum:
-    name: centos-release-openstack-train
-    state: present
-
-- name: upgrade all packages
-  yum:
-    name: '*'
-    state: latest
+- include_tasks: package.yml
 
 
 

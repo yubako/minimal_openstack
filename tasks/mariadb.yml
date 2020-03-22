@@ -1,0 +1,26 @@
+
+---
+- name: install mariadb
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "mariadb"
+    - "mariadb-server"
+    - "python2-PyMySQL"
+
+
+- name: configure mariadb
+  template:
+    src: mariadb_openstack.cnf.j2
+    dest: /etc/my.cnf.d/openstack.cnf
+    owner: root
+    group: root
+    mode: 0644
+
+- name: start mariadb
+  service:
+    name: mariadb.service
+    state: restarted
+    enabled: yes
+
