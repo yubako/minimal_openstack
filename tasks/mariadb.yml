@@ -19,6 +19,11 @@
     state: restarted
     enabled: yes
 
+- name: check mariadb login
+  command: "mysql -u root -p{{ minimal_openstack_mariadb_password }} -e 'show databases;''"
+  failed_when: false
+  register: logon
+
 - name: set root password
   expect:
     command: /usr/bin/mysql_secure_installation
@@ -31,4 +36,5 @@
       "Disallow root login remotely\\?" : "y"
       "Remove test database and access to it\\?" : "y"
       "Reload privilege tables now\\?" : "y"
+  when: login.rc != 0
 
