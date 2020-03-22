@@ -13,7 +13,8 @@
         enabled: yes
 
 - name: check user existance
-  command: "rabbitmqctl list_users"
+  shell: "rabbitmqctl list_users | grep openstack"
+  failed_when: false
   register: users
 
 - block:
@@ -22,5 +23,5 @@
     - name: grant permissions to openstack
       command: 'rabbitmqctl set_permissions openstack ".*" ".*" ".*"'
 
-  when: "'openstacK' not in users.stdout"
+  when: users.rc != 0
 
