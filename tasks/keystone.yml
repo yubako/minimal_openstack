@@ -5,19 +5,16 @@
 - name: create keystone databases
   block:
     - command: "{{ sql }} -e 'CREATE DATABASE keystone;'"
-    - set_fact: 
-        cmdline: >
-          {{ sql }} -e 
-            'GRANT ALL PRIVILEGES ON keystone.* 
-             TO \'keystone\'@\'localhost\' 
+    - command: >
+          {{ sql }} -e \
+            'GRANT ALL PRIVILEGES ON keystone.*  \
+             TO \'keystone\'@\'localhost\'  \
              IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
-    - debug:
-        var: cmdline
 
     - command: >
-        {{ sql }} -e 
-          'GRANT ALL PRIVILEGES ON keystone.* 
-           TO \'keystone\'@\'%\' 
+        {{ sql }} -e  \
+          'GRANT ALL PRIVILEGES ON keystone.*  \
+           TO \'keystone\'@\'%\'  \
            IDENTIFIED BY \'{{ minimal_openstack_keystone_dbpass }}\';'
 
 - name: install httpd
