@@ -20,7 +20,7 @@ before_script:
 check_syntax:
   stage: lint
   script:
-    - ansible-playbook -i tests/inventory tests/test.yml --dry-run
+    - ansible-playbook -i tests/inventory tests/test.yml --check
 
 
 test_result:
