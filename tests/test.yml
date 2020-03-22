@@ -3,6 +3,6 @@
   become: yes
   gather_facts: no
   vars:
-    minimal_openstack_controller_management_ip: "127.0.0.1"
+    minimal_openstack_controller_management_ip: "192.168.2.114"
   roles:
     - role: ../../
