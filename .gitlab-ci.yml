@@ -25,7 +25,7 @@ test_result:
   stage: test
   script:
     #- ansible-playbook -i tests/inventory tests/test.yml --skip-tags packages,mariadb,queue,memcached,etcd -vvv
-    - ansible-playbook -i tests/inventory tests/test.yml --skip-tags
+    - ansible-playbook -i tests/inventory tests/test.yml 
     - py.test --hosts=ansible@server tests/test_mariadb.py
     - py.test --hosts=ansible@server tests/test_rabbitmq.py
     - py.test --hosts=ansible@server tests/test_memcached.py
