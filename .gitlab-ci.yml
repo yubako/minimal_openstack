@@ -16,6 +16,8 @@ services:
 before_script:
   - mkdir ~/.ssh
   - cp /home/ansible/.ssh/id_rsa ~/.ssh/id_rsa
+  - rm -f /var/lib/mysql/mysql.sock
+  - systemctl restart mariadb
 
 check_syntax:
   stage: lint
