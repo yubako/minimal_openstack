@@ -91,9 +91,9 @@
       failed_when: false
       register: service
     - command: >
-        {{ openstack }} project create  \
-          --domain default              \
-          --description 'Service Project'   \
+        {{ openstack }} project create 
+          --domain default
+          --description 'Service Project'
           service
       when: service.rc != 0
 
