@@ -35,7 +35,7 @@
 
   - name: add admin role to glance user
     command: >
-      openstack role add --project service --user glance admin
+      {{ openstack }} role add --project service --user glance admin
 
   when: glance.rc != 0
 
