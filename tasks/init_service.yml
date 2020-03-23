@@ -25,5 +25,5 @@
 - name: create service
   command: >
     {{ openstack }} service create
-    --name {{ service_name }} --description "{{ service_descriotion }}" {{ service_type }}
+    --name {{ service_name }} --description "{{ service_description }}" {{ service_type }}
   when: service.rc != 0
