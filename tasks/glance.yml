@@ -27,7 +27,7 @@
   failed_when: false
   register: glance
 
-block:
+- block:
   - name: create glance user in openstack
     command: >
       {{ openstack }} user create --domain default 
@@ -37,7 +37,7 @@ block:
     command: >
       openstack role add --project service --user glance admin
 
-when: glance.rc != 0
+  when: glance.rc != 0
 
 
 - name: check glance service existence
