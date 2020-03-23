@@ -97,4 +97,9 @@
         service
       when: service.rc != 0
 
+- name: Put credential
+  template:
+    src: adminrc.j2
+    dst: ~/adminrc
+
 
