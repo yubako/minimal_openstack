@@ -12,7 +12,7 @@
 
   - name: add admin role to user
     command: >
-      {{ openstack }} role add --project service --user {{ service_user_name} }} admin
+      {{ openstack }} role add --project service --user {{ service_user_name }} admin
 
   when: user.rc != 0
 
