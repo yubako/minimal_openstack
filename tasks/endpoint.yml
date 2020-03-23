@@ -1,0 +1,14 @@
+
+
+- name: check endpoint existence
+  command: >
+    {{ openstack }} endpoint list --service {{ service }} --interface {{ interface }}
+  failed_when: false
+  register: endpoint
+
+- name: create endpoint
+  command: >
+    {{ openstack }} endpoint create --region RegionOne {{ service }} {{ interface }} {{ url }}
+  when: 
+    - endpoint.rc == 0 
+    - endpoint.stdout_lines | length < 3

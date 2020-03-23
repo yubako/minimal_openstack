@@ -8,3 +8,6 @@ minimal_openstack_admin_password: "d91acde413c8c368f93f"
 minimal_openstack_mariadb_password: "8f10d17241a5fbc04df8"
 minimal_openstack_rabbitmq_password: "76747eb5850f6613871a"
 minimal_openstack_keystone_dbpass: "b245714f3b1a5752ac4b"
+minimal_openstack_glance_dbpass: "76846b910ff70c19a432"
+
+minimal_openstack_glance_user_password: "0347cdb8059fa90d5eae"
