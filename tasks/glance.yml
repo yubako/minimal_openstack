@@ -36,7 +36,8 @@ block:
   - name: add admin role to glance user
     command: >
       openstack role add --project service --user glance admin
-  when: glance.rc != 0
+
+when: glance.rc != 0
 
 
 - name: check glance service existence
