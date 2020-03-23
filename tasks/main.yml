@@ -1,7 +1,7 @@
 ---
 
 - set_fact:
-    openstack: |
+    openstack: >
       "openstack " \
       "--os-interface public " \
       "--os-project-name admin " \
