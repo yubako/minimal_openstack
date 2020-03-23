@@ -91,7 +91,7 @@
       failed_when: false
       register: service
     - command: >
-        {{ openstack }} project create 
+        "{{ openstack }} project create"
           --domain default
           --description 'Service Project'
           service
