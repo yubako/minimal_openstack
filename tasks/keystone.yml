@@ -1,34 +1,9 @@
 
-<<<<<<< HEAD
-
-- name: check keystone database existance
-  command: "{{ sql }} -e 'use keystone;'"
-  failed_when: false
-  register: ret
-
-- name: create keystone databases
-  block:
-    - command: "{{ sql }} -e 'CREATE DATABASE keystone;'"
-    - command: >
-          {{ sql }} -e \
-            "GRANT ALL PRIVILEGES ON keystone.*  \
-             TO 'keystone'@'localhost'  \
-             IDENTIFIED BY '{{ minimal_openstack_keystone_dbpass }}';"
-
-    - command: >
-        {{ sql }} -e  \
-          "GRANT ALL PRIVILEGES ON keystone.*  \
-           TO 'keystone'@'%'  \
-           IDENTIFIED BY '{{ minimal_openstack_keystone_dbpass }}';"
-
-  when: ret.rc != 0
-=======
 - include_tasks: init_database.yml
   vars:
     database_name: keystone
     database_user: keystone
     database_pass: "{{ minimal_openstack_keystone_dbpass }}"
->>>>>>> dev
 
 - name: install httpd
   yum:

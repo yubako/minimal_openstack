@@ -1,57 +1,4 @@
 
-<<<<<<< HEAD
-
-- name: check glance database existence
-  command: "{{ sql }} -e 'use glance;'"
-  failed_when: false
-  register: ret
-
-- name: create glance databases
-  block:
-    - command: "{{ sql }} -e 'CREATE DATABASE glance;'"
-    - command: >
-          {{ sql }} -e \
-            "GRANT ALL PRIVILEGES ON glance.*  \
-             TO 'glance'@'localhost'  \
-             IDENTIFIED BY '{{ minimal_openstack_glance_dbpass }}';"
-
-    - command: >
-        {{ sql }} -e  \
-          "GRANT ALL PRIVILEGES ON glance.*  \
-           TO 'glance'@'%'  \
-           IDENTIFIED BY '{{ minimal_openstack_glance_dbpass }}';"
-
-  when: ret.rc != 0
-
-- name: check glance user existence
-  command: "{{ openstack }} user show glance"
-  failed_when: false
-  register: glance
-
-- block:
-  - name: create glance user in openstack
-    command: >
-      {{ openstack }} user create --domain default 
-      --password {{ minimal_openstack_glance_user_password }} glance
-
-  - name: add admin role to glance user
-    command: >
-      {{ openstack }} role add --project service --user glance admin
-
-  when: glance.rc != 0
-
-
-- name: check glance service existence
-  command: "{{ openstack }} service show glance"
-  failed_when: false
-  register: glance_service
-
-- name: create glance service
-  command: >
-    {{ openstack }} service create
-    --name glance --description "Openstack Image" image
-  when: glance_service.rc != 0
-=======
 - include_tasks: init_database.yml
   vars:
     database_name: glance
@@ -65,7 +12,6 @@
     service_user_name: glance
     service_user_pass: "{{ minimal_openstack_glance_user_password }}"
     service_description: "Openstack Image"
->>>>>>> dev
 
 - name: Create image endpoint
   include_tasks: endpoint.yml
@@ -136,11 +82,7 @@
         option: filesystem_store_datadir,
         value: "/var/lib/glance/images/" }
 
-<<<<<<< HEAD
-- name: populate identity service
-=======
 - name: populate glance service
->>>>>>> dev
   shell: "su -s /bin/sh -c 'glance-manage db_sync' glance"
 
 - name: start glance-api
