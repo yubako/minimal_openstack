@@ -26,7 +26,7 @@
 
 - name: install openstack-placement-api
   yum:
-    name: openstack-placement-api
+    name: [ 'openstack-placement-api', 'python2-osc-placement' ]
     state: present
 
 - name: update placement configuration
@@ -71,6 +71,24 @@
     - { section: keystone_authtoken,
         option: password,
         value: "{{ minimal_openstack_placement_user_password }}"}
+
+- block:
+  # https://ask.openstack.org/en/question/122022/stein-expecting-value-line-1-column-1-char-0-oscplacement/
+  - name: For workaround
+    blockinfile:
+      path: /etc/httpd/conf.d/00-placement-api.conf
+      block: |
+        <Directory /usr/bin>
+           <IfVersion >= 2.4>
+              Require all granted
+           </IfVersion>
+           <IfVersion < 2.4>
+              Order allow,deny
+              Allow from all
+           </IfVersion>
+        </Directory>
+
+
 
 - name: populate placement service
   shell: "su -s /bin/sh -c 'placement-manage db sync' placement"

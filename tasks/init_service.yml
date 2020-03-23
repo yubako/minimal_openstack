@@ -4,18 +4,20 @@
   failed_when: false
   register: user
 
-- block:
-  - name: create user in openstack
-    command: >
-      {{ openstack }} user create --domain default 
-      --password {{ service_user_pass }} {{ service_user_name }}
-
-  - name: add admin role to user
-    command: >
-      {{ openstack }} role add --project service --user {{ service_user_name }} admin
-
+- name: create user in openstack
+  command: >
+    {{ openstack }} user create --domain default 
+    --password {{ service_user_pass }} {{ service_user_name }}
   when: user.rc != 0
 
+- name: check user role
+  command: " {{ openstack }} role assignment list --names --role admin --user placement"
+  register: role
+
+- name: add admin role to user
+  command: >
+    {{ openstack }} role add --project service --user {{ service_user_name }} admin
+  when: role.stdout_lines | length < 3
 
 - name: check service existence
   command: "{{ openstack }} service show {{ service_name }} "
