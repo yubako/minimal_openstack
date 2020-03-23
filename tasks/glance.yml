@@ -1,4 +1,5 @@
 
+<<<<<<< HEAD
 
 - name: check glance database existence
   command: "{{ sql }} -e 'use glance;'"
@@ -50,6 +51,21 @@
     {{ openstack }} service create
     --name glance --description "Openstack Image" image
   when: glance_service.rc != 0
+=======
+- include_tasks: init_database.yml
+  vars:
+    database_name: glance
+    database_user: glance
+    database_pass: "{{ minimal_openstack_glance_dbpass }}"
+
+- include_tasks: init_service.yml
+  vars:
+    service_name: glance
+    service_type: image
+    service_user_name: glance
+    service_user_pass: "{{ minimal_openstack_glance_user_password }}"
+    service_description: "Openstack Image"
+>>>>>>> dev
 
 - name: Create image endpoint
   include_tasks: endpoint.yml
@@ -120,7 +136,11 @@
         option: filesystem_store_datadir,
         value: "/var/lib/glance/images/" }
 
+<<<<<<< HEAD
 - name: populate identity service
+=======
+- name: populate glance service
+>>>>>>> dev
   shell: "su -s /bin/sh -c 'glance-manage db_sync' glance"
 
 - name: start glance-api

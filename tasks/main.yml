@@ -31,3 +31,9 @@
 
 - include_tasks: glance.yml
   tags: glance
+<<<<<<< HEAD
+=======
+
+- include_tasks: placement.yml
+  tags: placement
+>>>>>>> dev

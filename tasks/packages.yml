@@ -13,6 +13,6 @@
 
 - name: install required packages
   yum:
-    name: [ 'python-openstackclient', 'openstack-selinux' ]
+    name: [ 'python-openstackclient', 'openstack-selinux', 'openstack-utils' ]
     state: present
 
