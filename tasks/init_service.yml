@@ -1,0 +1,29 @@
+
+- name: check user existence
+  command: "{{ openstack }} user show {{ service_user_name }}"
+  failed_when: false
+  register: user
+
+- block:
+  - name: create user in openstack
+    command: >
+      {{ openstack }} user create --domain default 
+      --password {{ service_user_pass }} {{ service_user_name }}
+
+  - name: add admin role to user
+    command: >
+      {{ openstack }} role add --project service --user {{ service_user_name} }} admin
+
+  when: user.rc != 0
+
+
+- name: check service existence
+  command: "{{ openstack }} service show {{ service_name }} "
+  failed_when: false
+  register: service
+
+- name: create service
+  command: >
+    {{ openstack }} service create
+    --name {{ service_name }} --description "{{ service_descriotion }}" {{ service_type }}
+  when: ervice.rc != 0
