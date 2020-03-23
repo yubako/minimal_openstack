@@ -2,13 +2,8 @@
 ---
 - name: install mariadb
   yum:
-    name: "{{ item }}"
+    name: ["mariadb", "mariadb-server", "python2-PyMySQL", "pexpect"]
     state: present
-  with_items:
-    - "mariadb"
-    - "mariadb-server"
-    - "python2-PyMySQL"
-
 
 - name: configure mariadb
   template:
@@ -23,4 +18,23 @@
     name: mariadb.service
     state: restarted
     enabled: yes
+
+- name: check mariadb login
+  command: "mysql -u root -p{{ minimal_openstack_mariadb_password }} -e 'show databases;'"
+  failed_when: false
+  register: logon
+
+- name: set root password
+  expect:
+    command: /usr/bin/mysql_secure_installation
+    responses:
+      "Enter current password for root \\(enter for none\\): " : ""
+      "Set root password\\? \\[Y\\/n\\] " : "Y"
+      "New password: " : "{{ minimal_openstack_mariadb_password }}"
+      "Re-enter new password: " : "{{ minimal_openstack_mariadb_password }}"
+      "Remove anonymous users\\?" : "y"
+      "Disallow root login remotely\\?" : "y"
+      "Remove test database and access to it\\?" : "y"
+      "Reload privilege tables now\\?" : "y"
+  when: logon.rc != 0
 

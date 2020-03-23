@@ -1,0 +1,100 @@
+
+
+- set_fact:
+    sql: "mysql -u root -p{{ minimal_openstack_mariadb_password }}"
+
+- name: check keystone database existance
+  command: "{{ sql }} -e 'use keystone;'"
+  failed_when: false
+  register: ret
+
+- name: create keystone databases
+  block:
+    - command: "{{ sql }} -e 'CREATE DATABASE keystone;'"
+    - command: >
+          {{ sql }} -e \
+            "GRANT ALL PRIVILEGES ON keystone.*  \
+             TO 'keystone'@'localhost'  \
+             IDENTIFIED BY '{{ minimal_openstack_keystone_dbpass }}';"
+
+    - command: >
+        {{ sql }} -e  \
+          "GRANT ALL PRIVILEGES ON keystone.*  \
+           TO 'keystone'@'%'  \
+           IDENTIFIED BY '{{ minimal_openstack_keystone_dbpass }}';"
+
+  when: ret.rc != 0
+
+- name: install httpd
+  yum:
+    name: [ "openstack-keystone", "httpd", "mod_wsgi" ]
+    state: present
+
+- name: configure keystone.conf
+  block:
+    - ini_file:
+        path: /etc/keystone/keystone.conf
+        section: database
+        option: connection
+        value: "mysql+pymysql://keystone:{{ minimal_openstack_keystone_dbpass }}@controller/keystone"
+
+    - ini_file:
+        path: /etc/keystone/keystone.conf
+        section: token
+        option: provider
+        value: fernet
+
+
+- name: check keystone service has been already deployed
+  command: "{{ openstack }} endpoint list --service identity"
+  failed_when: false
+  register: endpoint
+
+- block:
+  - name: populate identity service
+    shell: "su -s /bin/sh -c 'keystone-manage db_sync' keystone"
+  
+  - name: Initialize Fernet key repositories
+    block:
+      - command: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+      - command: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+  
+  - name: Configure bootstrap identity service
+    command: >
+      keystone-manage bootstrap --bootstrap-password {{ minimal_openstack_admin_password }} 
+      --bootstrap-admin-url http://controller:5000/v3/ 
+      --bootstrap-internal-url http://controller:5000/v3/ 
+      --bootstrap-public-url http://controller:5000/v3/ 
+      --bootstrap-region-id RegionOne
+  when: endpoint.rc != 0
+
+- name: Configure httpd
+  block:
+    - lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerName'
+        line: ServerName controller
+    - file:
+        src: /usr/share/keystone/wsgi-keystone.conf
+        dest: /etc/httpd/conf.d/wsgi-keystone.conf
+        state: link
+
+- name: start httpd
+  service: 
+    name: httpd
+    state: restarted
+    enabled: yes
+
+- name: Create service projcet
+  block:
+    - command: "{{ openstack }} project show service" 
+      failed_when: false
+      register: service
+    - command: >
+        {{ openstack }} project create
+        --domain default
+        --description 'Service Project'
+        service
+      when: service.rc != 0
+
+

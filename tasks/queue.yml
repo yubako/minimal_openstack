@@ -1,0 +1,27 @@
+
+- name: install rabbitmq
+  yum:
+    name: rabbitmq-server
+    state: present
+
+- name: start rabbitmq
+  block:
+    - command: "rabbitmq-plugins enable rabbitmq_management"
+    - service: 
+        name: rabbitmq-server.service
+        state: restarted
+        enabled: yes
+
+- name: check user existance
+  shell: "rabbitmqctl list_users | grep openstack"
+  failed_when: false
+  register: users
+
+- block:
+    - name: add user in rabbitmq
+      command: "rabbitmqctl add_user openstack {{ minimal_openstack_rabbitmq_password }}"
+    - name: grant permissions to openstack
+      command: 'rabbitmqctl set_permissions openstack ".*" ".*" ".*"'
+
+  when: users.rc != 0
+
