@@ -11,4 +11,4 @@
     {{ openstack }} endpoint create --region RegionOne {{ service }} {{ interface }} {{ url }}
   when: 
     - endpoint.rc == 0 
-    - endpoint.stdout_lines | length > 3
+    - endpoint.stdout_lines | length < 3
