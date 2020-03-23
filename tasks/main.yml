@@ -12,6 +12,8 @@
       --os-password {{ minimal_openstack_admin_password }}
       --os-auth-type v3password
 
+- set_fact:
+    sql: "mysql -u root -p{{ minimal_openstack_mariadb_password }}"
 
 - include_tasks: packages.yml
   tags: packages
@@ -27,3 +29,5 @@
 - include_tasks: keystone.yml
   tags: keystone
 
+- include_tasks: glance.yml
+  tags: glance

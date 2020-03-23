@@ -1,8 +1,5 @@
 
 
-- set_fact:
-    sql: "mysql -u root -p{{ minimal_openstack_mariadb_password }}"
-
 - name: check keystone database existance
   command: "{{ sql }} -e 'use keystone;'"
   failed_when: false
@@ -100,6 +97,6 @@
 - name: Put credential
   template:
     src: adminrc.j2
-    dst: ~/adminrc
+    dest: ~/adminrc
 
 
