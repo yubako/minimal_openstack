@@ -37,7 +37,7 @@
     value: "{{ item.value }}"
   with_items:
     # Database
-    - { section: database, 
+    - { section: placement_database, 
         option: connection,
         value: "mysql+pymysql://placement:{{ minimal_openstack_placement_dbpass }}@controller/placement" }
 
