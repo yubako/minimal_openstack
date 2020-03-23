@@ -1,0 +1,84 @@
+
+- include_tasks: init_database.yml
+  vars:
+    database_name: placement
+    database_user: placement
+    database_pass: "{{ minimal_openstack_placement_dbpass }}"
+
+- include_tasks: init_service.yml
+  vars:
+    service_name: placement
+    service_type: placement
+    service_user_name: placement
+    service_user_pass: "{{ minimal_openstack_placement_user_password }}"
+    service_description: "Placement API"
+
+- name: Create placement endpoint
+  include_tasks: endpoint.yml
+  vars:
+    service: "placement"
+    interface: "{{ item }}"
+    url: "http://controller:8778"
+  with_items:
+    - "public"
+    - "internal"
+    - "admin"
+
+- name: install openstack-placement-api
+  yum:
+    name: openstack-placement-api
+    state: present
+
+- name: update placement configuration
+  ini_file:
+    path: /etc/placement/placement.conf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    # Database
+    - { section: database, 
+        option: connection,
+        value: "mysql+pymysql://placement:{{ minimal_openstack_placement_dbpass }}@controller/placement" }
+
+    # api
+    - { section: api,
+        option: auth_strategy,
+        value: keystone }
+
+    # keystone_authtoken
+    - { section: keystone_authtoken,
+        option: auth_url,
+        value: "http://controller:5000/v3" }
+    - { section: keystone_authtoken,
+        option: memcached_servers,
+        value: "controller:11211" }
+    - { section: keystone_authtoken,
+        option: auth_type,
+        value: password }
+    - { section: keystone_authtoken,
+        option: project_domain_name,
+        value: Default}
+    - { section: keystone_authtoken,
+        option: user_domain_name,
+        value: Default}
+    - { section: keystone_authtoken,
+        option: project_name,
+        value: service}
+    - { section: keystone_authtoken,
+        option: username,
+        value: placement}
+    - { section: keystone_authtoken,
+        option: password,
+        value: "{{ minimal_openstack_placement_user_password }}"}
+
+- name: populate placement service
+  shell: "su -s /bin/sh -c 'placement-manage db sync' placement"
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
+
+
+

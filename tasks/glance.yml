@@ -82,7 +82,7 @@
         option: filesystem_store_datadir,
         value: "/var/lib/glance/images/" }
 
-- name: populate identity service
+- name: populate glance service
   shell: "su -s /bin/sh -c 'glance-manage db_sync' glance"
 
 - name: start glance-api
