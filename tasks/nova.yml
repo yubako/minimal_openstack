@@ -28,26 +28,6 @@
     - "internal"
     - "admin"
 
-
-- name: setup repository
-  yum:
-    name: centos-release-openstack-train
-    state: present
-
-- name: upgrade all packages
-  yum:
-    name: '*'
-    state: latest
-  tags: upgrade
-
-- name: install required packages
-  yum:
-    name: 
-      - python-openstackclient
-      - openstack-selinux
-      - openstack-utils
-    state: present
-
 - name: install compute packages
   yum:
     name: 
