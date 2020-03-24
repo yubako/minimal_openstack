@@ -122,6 +122,11 @@
     - {
       section: DEFAULT,
       option: use_neutron,
+      value: "true"
+    }
+    - {
+      section: DEFAULT,
+      option: firewall_driver,
       value: nova.virt.firewall.NoopFirewallDriver
     }
 
