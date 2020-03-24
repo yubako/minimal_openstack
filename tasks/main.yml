@@ -34,3 +34,6 @@
 
 - include_tasks: placement.yml
   tags: placement
+
+- include_tasks: nova.yml
+  tags: nova
