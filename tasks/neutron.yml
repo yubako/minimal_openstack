@@ -1,0 +1,78 @@
+---
+- include_tasks: init_database.yml
+  vars:
+    database_name: neutron
+    database_user: neutron
+    database_pass: "{{ minimal_openstack_neutron_dbpass }}"
+
+- include_tasks: init_service.yml
+  vars:
+    service_name: neutron
+    service_type: network
+    service_user_name: neutron
+    service_user_pass: "{{ minimal_openstack_neutron_user_password }}"
+    service_description: "Openstack Networking"
+
+- name: Create neutron endpoint
+  include_tasks: endpoint.yml
+  vars:
+    service: "network"
+    interface: "{{ item }}"
+    url: "http://controller:9696"
+  with_items:
+    - "public"
+    - "internal"
+    - "admin"
+
+- include_task: neutron_self_service_network.yml
+
+- name: Configure metadata_agent.ini
+  ini_file:
+    path: /etc/neutron/metadata_agent.in
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { 
+      section: DEFAULT,
+      option: nova_metadata_host,
+      value: "controller"
+    }
+    - { 
+      section: DEFAULT,
+      option: metadata_proxy_shared_secret,
+      value: "{{ minimal_openstack_metadata_secret }}"
+    }
+
+- file:
+    src: /etc/neutron/plugins/ml2/ml2_conf.ini
+    dest: /etc/neutron/plugin.ini
+    state: link
+
+- name: populate database
+  shell: >
+    su -s /bin/sh -c 
+    "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
+
+- name: restart nova-api
+  service: openstack-nova-api.service
+  state: restarted
+
+- name: start neutron services
+  service: 
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items:
+    - neutron-server.service
+    - neutron-linuxbridge-agent.service 
+    - neutron-dhcp-agent.service 
+    - neutron-metadata-agent.service
+
+- name: start l3-agent
+  service: 
+    name: "{{ item }}"
+    enabled: yes
+    state: started
+  with_items:
+    - neutron-l3-agent.service

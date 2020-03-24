@@ -19,3 +19,4 @@ minimal_openstack_nova_user_password: "2321402c7010d7d01f76"
 minimal_openstack_neutron_user_password: "b218b4f15392c785318e"
 
 minimal_openstack_controller_provider_physical_network_interface: "eth1"
+minimal_openstack_metadata_secret: b6c2b150d16eb5c235f0
