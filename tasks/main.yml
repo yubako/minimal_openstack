@@ -37,3 +37,6 @@
 
 - include_tasks: nova.yml
   tags: nova
+
+- include_tasks: neutron.yml
+  tags: neutron
