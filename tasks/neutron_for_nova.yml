@@ -85,7 +85,7 @@
     - { 
       section: linux_bridge,
       option: physical_interface_mappings,
-      value: "{{ minimal_openstack_compute_provider_physical_network_interface }}"
+      value: "{{ minimal_openstack_controller_provider_physical_network_interface }}"
     }
     - { 
       section: vxlan,
@@ -95,7 +95,7 @@
     - { 
       section: vxlan,
       option: local_ip,
-      value:  "{{ minimal_openstack_compute_management_ip }}"
+      value:  "{{ minimal_openstack_controller_management_ip }}"
     }
     - { 
       section: vxlan,

@@ -17,3 +17,5 @@ minimal_openstack_glance_user_password: "0347cdb8059fa90d5eae"
 minimal_openstack_placement_user_password: "03c12587b322acdf4d13"
 minimal_openstack_nova_user_password: "2321402c7010d7d01f76"
 minimal_openstack_neutron_user_password: "b218b4f15392c785318e"
+
+minimal_openstack_controller_provider_physical_network_interface: "eth1"

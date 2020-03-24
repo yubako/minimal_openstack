@@ -137,7 +137,7 @@
     - {
       section: DEFAULT,
       option: my_ip,
-      value: "{{ minimal_openstack_compute_management_ip }}"
+      value: "{{ minimal_openstack_controller_management_ip }}"
     }
     - {
       section: DEFAULT,
