@@ -11,7 +11,7 @@
   when: user.rc != 0
 
 - name: check user role
-  command: " {{ openstack }} role assignment list --names --role admin --user placement"
+  command: " {{ openstack }} role assignment list --names --role admin --user {{ service_user_name }}"
   register: role
 
 - name: add admin role to user
