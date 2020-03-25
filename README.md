@@ -9,15 +9,23 @@ Requirements
 * Centos7前提
 * yum update済みであること
 * NetworkManagerは停止した状態でネットワーク設定済みであること
+* NICはManagement用とProvider Network用の2本必要
+  Provider Network用は自動configurationされないようBOOTPROTOはnoneとしておくこと
+  ```
+  TYPE=Ethernet
+  BOOTPROTO=none
+  DEVICE=eth1
+  ONBOOT=yes
+  ```
 * role内ではIPではなくFQDNを使うので /etc/hosts or DNSが設定されていること
   必要なもの
-```
-# controller
-10.0.0.11       controller
-
-# compute1
-10.0.0.31       compute1
-```
+  ```
+  # controller
+  10.0.0.11       controller
+  
+  # compute1
+  10.0.0.31       compute1
+  ```
 
 
 
