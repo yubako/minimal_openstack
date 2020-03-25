@@ -24,7 +24,7 @@
     - "internal"
     - "admin"
 
-- include_task: neutron_self_service_network.yml
+- include_tasks: neutron_self_service_network.yml
 
 - name: Configure metadata_agent.ini
   ini_file:
