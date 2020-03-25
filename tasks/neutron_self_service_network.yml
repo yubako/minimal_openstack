@@ -17,7 +17,7 @@
     - { 
       section: database,
       option: connection,
-      value: "connection = mysql+pymysql://neutron:{{ minimal_openstack_neutron_dbpass }}@controller/neutron"
+      value: "mysql+pymysql://neutron:{{ minimal_openstack_neutron_dbpass }}@controller/neutron"
     }
     - { 
       section: DEFAULT,
