@@ -55,8 +55,9 @@
     "neutron-db-manage --config-file /etc/neutron/neutron.conf --config-file /etc/neutron/plugins/ml2/ml2_conf.ini upgrade head" neutron
 
 - name: restart nova-api
-  service: openstack-nova-api.service
-  state: restarted
+  service:
+    name: openstack-nova-api.service
+    state: restarted
 
 - name: start neutron services
   service: 
