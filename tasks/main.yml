@@ -15,9 +15,6 @@
 - set_fact:
     sql: "mysql -u root -p{{ minimal_openstack_mariadb_password }}"
 
-- include_tasks: neutron.yml
-  tags: neutron
-
 - include_tasks: packages.yml
   tags: packages
 - include_tasks: mariadb.yml
@@ -40,3 +37,6 @@
 
 - include_tasks: nova.yml
   tags: nova
+
+- include_tasks: neutron.yml
+  tags: neutron
