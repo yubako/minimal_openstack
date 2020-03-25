@@ -13,7 +13,7 @@
     {{ sql }} -e 'SELECT * FROM mysql.user WHERE Host = "localhost" and User = "{{ database_user }}";'
   register: user_localhost
 
-- name: glant on localhost
+- name: grant on localhost
   command: >
       {{ sql }} -e \
         "GRANT ALL PRIVILEGES ON {{ database_name }}.*  \
