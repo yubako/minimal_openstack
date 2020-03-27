@@ -200,7 +200,7 @@
     - { 
       section: linux_bridge,
       option: physical_interface_mappings,
-      value: "{{ minimal_openstack_controller_provider_physical_network_interface }}"
+      value: "provider:{{ minimal_openstack_controller_provider_physical_network_interface }}"
     }
     - { 
       section: vxlan,
