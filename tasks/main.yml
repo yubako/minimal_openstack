@@ -26,6 +26,9 @@
 - include_tasks: etcd.yml
   tags: etcd
 
+- include_tasks: heat.yml
+  tags: heat
+
 - include_tasks: keystone.yml
   tags: keystone
 

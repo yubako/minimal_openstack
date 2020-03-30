@@ -1,0 +1,245 @@
+
+- include_tasks: init_database.yml
+  vars:
+    database_name: heat
+    database_user: heat
+    database_pass: "{{ minimal_openstack_heat_dbpass }}"
+
+- include_tasks: init_service.yml
+  vars:
+    service_name: heat
+    service_type: orchestration
+    service_user_name: heat
+    service_user_pass: "{{ minimal_openstack_heat_user_password }}"
+    service_description: "Orchestration"
+
+- include_tasks: init_service.yml
+  vars:
+    service_name: heat-cfn
+    service_type: cloudformation
+    service_user_name: heat
+    service_user_pass: "{{ minimal_openstack_heat_user_password }}"
+    service_description: "Orchestration"
+
+- name: Create image endpoint
+  include_tasks: endpoint.yml
+  vars:
+    service: "orchestration"
+    interface: "{{ item }}"
+    url: "http://controller:8004/v1/%\(tenant_id\)s"
+  with_items:
+    - "public"
+    - "internal"
+    - "admin"
+
+- name: Create image endpoint
+  include_tasks: endpoint.yml
+  vars:
+    service: "cloudformation"
+    interface: "{{ item }}"
+    url: "http://controller:8000/v1/"
+  with_items:
+    - "public"
+    - "internal"
+    - "admin"
+
+
+- name: check heat domain
+  command: "{{ openstack }} domain show heat"
+  failed_when: false
+  register: domain
+
+- name: create heat domain
+  command: "{{ openstack }} domain create --description 'Stack projects and users' heat"
+  when: domain.rc != 0
+
+- name: check heat_domain_admin
+  command: "{{ openstack }} user show --domain heat heat_domain_admin"
+  failed_when: false
+  register: user
+
+- name: create heat_domain_admin
+  command: >
+    {{ openstack }} user create --domain heat 
+    --password {{ minimal_openstack_heat_user_password }} heat_domain_admin
+  when: user.rc != 0
+
+- name: check user role
+  command: "{{ openstack }} role assignment list --names --role admin --user heat_domain_admin" 
+  register: role
+
+- name: add admin role to user
+  command: >
+    {{ openstack }} role add --domain heat --user-domain heat --user heat_domain_admin admin
+  when: role.stdout_lines | length < 3
+
+- name: check role existence
+  command: "{{ openstack }} role show heat_stack_owner" 
+  register: role
+
+- name: create role
+  command: >
+    {{ openstack }} role create heat_stack_owner
+  when: role.rc != 0
+
+
+
+- name: create demo project
+  command: {{ openstack }} project show demo
+  failed_when: false
+  register: project
+
+- block:
+    - command: "{{ openstack }} project create demo"
+    - command: "{{ openstack }} user create --password demo123 demo"
+    - command: "{{ openstack }} role add --project demo --user demo --heat_stack_owner"
+    - command: "{{ openstack }} role create heat_stack_user"
+
+  when: project.rc != 0
+
+- name: install packages
+  yum:
+    name: 
+      - openstack-heat-api 
+      - openstack-heat-api-cfn
+      - openstack-heat-engine
+    state: present
+
+- name: configure heat.conf
+  ini_file:
+    path: /etc/heat/heat.conf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - { 
+      section: database,
+      option: connection,
+      value: "mysql+pymysql://heat:{{ minimal_openstack_heat_dbpass }}@controller/heat"
+    }
+    - { 
+      section: DEFAULT,
+      option: transport_url,
+      value: "rabbit://openstack:{{ minimal_openstack_rabbitmq_password }}@controller"
+    }
+    - { 
+      section: keystone_authtoken,
+      option: auth_uri,
+      value: "http://controller:5000"
+    }
+    - { 
+      section: keystone_authtoken,
+      option: auth_url,
+      value: "http://controller:35357"
+    }
+    - { 
+      section: keystone_authtoken,
+      option: memcached_servers,
+      value: "http://controller:11211"
+    }
+    - { 
+      section: keystone_authtoken,
+      option: auth_type,
+      value: password
+    }
+    - { 
+      section: keystone_authtoken,
+      option: project_domain_name,
+      value: default
+    }
+    - { 
+      section: keystone_authtoken,
+      option: user_domain_name,
+      value: default
+    }
+    - { 
+      section: keystone_authtoken,
+      option: project_name,
+      value: service
+    }
+    - { 
+      section: keystone_authtoken,
+      option: username,
+      value: heat 
+    }
+    - { 
+      section: keystone_authtoken,
+      option: password,
+      value: "{{ minimal_openstack_heat_user_password }}"
+    }
+    - { 
+      section: trustee,
+      option: auth_type,
+      value: password
+    }
+    - { 
+      section: trustee,
+      option: auth_url,
+      value: http://controller:35357
+    }
+    - { 
+      section: trustee,
+      option: username,
+      value: heat
+    }
+    - { 
+      section: trustee,
+      option: password,
+      value: "{{ minimal_openstack_heat_user_password }}"
+    }
+    - { 
+      section: trustee,
+      option: user_domain_name,
+      value: default
+    }
+    - { 
+      section: clients_keystone,
+      option: auth_uri,
+      value: http://controller:35357
+    }
+    - { 
+      section: ec2authtoken,
+      option: auth_uri,
+      value: http://controller:5000/v3
+    }
+    - { 
+      section: DEFAULT,
+      option: heat_metadata_server_url,
+      value: http://controller:8000
+    }
+    - { 
+      section: DEFAULT,
+      option: heat_waitcondition_server_url,
+      value: http://controller:8000/v1/waitcondition
+    }
+    - { 
+      section: DEFAULT,
+      option: stack_domain_admin,
+      value: heat_domain_admin
+    }
+    - { 
+      section: DEFAULT,
+      option: stack_domain_admin_password,
+      value: "{{ minimal_openstack_heat_user_password }}"
+    }
+    - { 
+      section: DEFAULT,
+      option: stack_user_domain_name,
+      value: heat
+    }
+    
+
+- name: populate the orchestration database
+  shell: "su -s /bin/sh -c 'heat-manage db_sync' heat"
+
+- name: start heat services
+  service:
+    name: "{{ item }}"
+    enabled: yes
+  with_items:
+    - openstack-heat-api.service
+    - openstack-heat-api-cfn.service 
+    - openstack-heat-engine.service
+
+
+

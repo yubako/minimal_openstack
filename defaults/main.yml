@@ -12,11 +12,13 @@ minimal_openstack_glance_dbpass: "76846b910ff70c19a432"
 minimal_openstack_placement_dbpass: "13a4dde19d28cf9ca7da"
 minimal_openstack_nova_dbpass: "1dcecd262501073fee5b"
 minimal_openstack_neutron_dbpass: "c421dd051646302a587c"
+minimal_openstack_heat_dbpass: "7fe9be06b3a1ade47c0c"
 
 minimal_openstack_glance_user_password: "0347cdb8059fa90d5eae"
 minimal_openstack_placement_user_password: "03c12587b322acdf4d13"
 minimal_openstack_nova_user_password: "2321402c7010d7d01f76"
 minimal_openstack_neutron_user_password: "b218b4f15392c785318e"
+minimal_openstack_heat_user_password: "b6ac3f6c25ffb7f52824"
 
 minimal_openstack_controller_provider_physical_network_interface: "eth1"
 minimal_openstack_metadata_secret: b6c2b150d16eb5c235f0
