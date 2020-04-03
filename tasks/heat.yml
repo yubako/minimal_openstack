@@ -26,7 +26,7 @@
   vars:
     service: "orchestration"
     interface: "{{ item }}"
-    url: "http://controller:8004/v1/%\(tenant_id\)s"
+    url: "http://controller:8004/v1/%\\(tenant_id\\)s"
   with_items:
     - "public"
     - "internal"
@@ -75,6 +75,7 @@
 
 - name: check role existence
   command: "{{ openstack }} role show heat_stack_owner" 
+  failed_when: false
   register: role
 
 - name: create role
@@ -85,14 +86,14 @@
 
 
 - name: create demo project
-  command: {{ openstack }} project show demo
+  command: "{{ openstack }} project show demo"
   failed_when: false
   register: project
 
 - block:
     - command: "{{ openstack }} project create demo"
     - command: "{{ openstack }} user create --password demo123 demo"
-    - command: "{{ openstack }} role add --project demo --user demo --heat_stack_owner"
+    - command: "{{ openstack }} role add --project demo --user demo heat_stack_owner"
     - command: "{{ openstack }} role create heat_stack_user"
 
   when: project.rc != 0
@@ -130,12 +131,12 @@
     - { 
       section: keystone_authtoken,
       option: auth_url,
-      value: "http://controller:35357"
+      value: "http://controller:5000"
     }
     - { 
       section: keystone_authtoken,
       option: memcached_servers,
-      value: "http://controller:11211"
+      value: "controller:11211"
     }
     - { 
       section: keystone_authtoken,
@@ -175,7 +176,7 @@
     - { 
       section: trustee,
       option: auth_url,
-      value: http://controller:35357
+      value: http://controller:5000
     }
     - { 
       section: trustee,
@@ -195,12 +196,7 @@
     - { 
       section: clients_keystone,
       option: auth_uri,
-      value: http://controller:35357
-    }
-    - { 
-      section: ec2authtoken,
-      option: auth_uri,
-      value: http://controller:5000/v3
+      value: http://controller:5000
     }
     - { 
       section: DEFAULT,
@@ -236,6 +232,7 @@
   service:
     name: "{{ item }}"
     enabled: yes
+    state: restarted
   with_items:
     - openstack-heat-api.service
     - openstack-heat-api-cfn.service 
